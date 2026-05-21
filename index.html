@@ -415,9 +415,27 @@
 // Load from localStorage or init
 const STORAGE_KEY = 'ynp_data_v1';
 let data = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null') || {
-  music: Array(6).fill(null),
-  biz:   Array(6).fill(null),
-  ai:    Array(3).fill(null),
+  music: [
+    { type: 'iframe', src: 'https://drive.google.com/file/d/1pst5eUo5ZGimA4PcN0WOKK_dchY6kIWU/preview', title: 'MUSIC 01' },
+    { type: 'iframe', src: 'https://drive.google.com/file/d/1DN9k69DRwuA0XOt3oIm82e52XmWMJFxX/preview', title: 'MUSIC 02' },
+    { type: 'iframe', src: 'https://drive.google.com/file/d/1XfDGYKN9aIhPxiqagx1nKpeuCkYMSuGC/preview', title: 'MUSIC 03' },
+    { type: 'iframe', src: 'https://drive.google.com/file/d/12fKDkDQ5obbARXnnCLJvlnN8LyYBb-lV/preview', title: 'MUSIC 04' },
+    { type: 'iframe', src: 'https://drive.google.com/file/d/1s7GawFlb1Bp9Ah-fIuc_OwrW4nUdNVhm/preview', title: 'MUSIC 05' },
+    { type: 'iframe', src: 'https://drive.google.com/file/d/1MfCCHEw5c_iqYCYmW8oW_FZ6Vlb9jCW7/preview', title: 'MUSIC 06' },
+  ],
+  biz: [
+    { type: 'iframe', src: 'https://drive.google.com/file/d/1NxDgre2hogItprvItJvS9c7H0qT2iYiD/preview', title: 'BUSINESS SNS 01' },
+    { type: 'iframe', src: 'https://drive.google.com/file/d/1UEOGP1hawFCmtFeiwU7m23aYEgIEZ5Y_/preview', title: 'BUSINESS SNS 02' },
+    { type: 'iframe', src: 'https://drive.google.com/file/d/1fF1NHrQe46uP4yTGcqMCa0dd9W9FQOVF/preview', title: 'BUSINESS SNS 03' },
+    { type: 'iframe', src: 'https://drive.google.com/file/d/1sM7R2ncbvauB8fKDLA63dJYINk1jAh5k/preview', title: 'BUSINESS SNS 04' },
+    { type: 'iframe', src: 'https://drive.google.com/file/d/1BhW5ZZ2SwnUK0zNogW-LrqmMLTgGuHNy/preview', title: 'BUSINESS SNS 05' },
+    null,
+  ],
+  ai: [
+    { type: 'iframe', src: 'https://drive.google.com/file/d/1N-_h388YdlppYyx77umLLJPMocMMCSoc/preview', title: 'AI-GENERATED MEDIA 01' },
+    { type: 'iframe', src: 'https://drive.google.com/file/d/19_hwoT3t5xZ48YGookGoh2Qnt73q6tdV/preview', title: 'AI-GENERATED MEDIA 02' },
+    { type: 'iframe', src: 'https://drive.google.com/file/d/1mrCjHmndRLmSfVTrcOx2yWOMvTll49ps/preview', title: 'AI-GENERATED MEDIA 03' },
+  ],
 };
 
 let activeSection = null;
@@ -438,7 +456,14 @@ function makeCard(section, i) {
   card.className = 'card';
   card.onclick = () => openPanel(section, i);
 
-  if (item && item.type === 'video') {
+  if (item && item.type === 'iframe') {
+    const ifr = document.createElement('iframe');
+    ifr.src = item.src;
+    ifr.style.cssText = 'width:100%;height:100%;border:none;pointer-events:none;';
+    ifr.allow = 'autoplay';
+    card.appendChild(ifr);
+    card.appendChild(makeOverlay());
+  } else if (item && item.type === 'video') {
     const v = document.createElement('video');
     v.src = item.src;
     v.muted = true; v.loop = true; v.playsInline = true;
